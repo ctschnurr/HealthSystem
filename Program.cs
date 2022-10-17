@@ -8,10 +8,10 @@ namespace HealthSystem
 {
     internal class Program
     {
-        static bool debug = true;
-
         static string gameName;
         static string studioName;
+
+        static int lives;
 
         static int hp;
         static int hpMax;
@@ -73,10 +73,9 @@ namespace HealthSystem
         static void Menu()
         {
             Console.WriteLine("");
-            Console.WriteLine("  (1) Simulate Random Damage            (2) Simulate Damage (input value)");
-            Console.WriteLine("  ()");
-            Console.WriteLine("  ()");
-            Console.WriteLine("  (9) Disable Debug");
+            Console.WriteLine("  (1) Run Tests");
+            Console.WriteLine("");
+            Console.WriteLine("  (0) Quit");
             Console.WriteLine("");
 
             Console.Write("Enter Choice: ");
@@ -88,14 +87,8 @@ namespace HealthSystem
             {
                 case ConsoleKey.D1:
 
-                    Random rand = new Random();
-                    dice = rand.Next(0, 100);
-
-                    if (debug == true)
-                    {
                         Console.WriteLine("");
-                        Console.WriteLine("DEBUG: Read input as '1', random number generated is " + dice + ". Passing that value into TakeDamage method.");
-                    }    
+                        Console.WriteLine("DEBUG: Read input as '1', running tests for player stats.");             
 
                     Pause();
 
@@ -130,7 +123,7 @@ namespace HealthSystem
                 {
                     Console.WriteLine("");
                     Console.WriteLine("DEBUG: Checking if player is already dead or not. Current value for hp is " + hp + ". ");
-                }
+               
 
                 if (hp == 0)
                 {
@@ -180,7 +173,7 @@ namespace HealthSystem
                             if (debug == true)
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("DEBUG: Converted negative shield value to positive, and set sp to 0. SP = " + sp + ", Spill = " + spill);
+                                Console.WriteLine("DEBUG: Converted negative shield value to positive, and set sp to 0. SP = " + sp + ", Spill = " + spill + ". Applying spill to hp");
                             }
 
                             hp = hp - spill;
@@ -192,19 +185,20 @@ namespace HealthSystem
 
                     }
 
-                    hp = hp - damage;
-                    Console.WriteLine("");
-                    Console.Write("Player took " + damage + " damage!");
-                    HealthStat();
-
                     if (debug == true)
                     { 
                     Console.WriteLine("");
-                    Console.WriteLine("DEBUG: Value for hp is now " + hp + ". Next checking if player is now dead.");
+                    Console.WriteLine("DEBUG: Value for hp is now " + hp);
                     }
 
                     if (hp < 1)
                     {
+                        if (debug == true)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("DEBUG: Death detected. Setting health to 0 to clear possible negative value and removing 1 life.");
+                        }
+
                         Console.WriteLine("");
                         Console.WriteLine("");
                         Console.Write("Player has ");
@@ -213,10 +207,37 @@ namespace HealthSystem
                         Console.ResetColor();
                         Console.WriteLine("!");
                         hp = 0;
+                        lives = (lives - 1);
 
+                        if (lives == -1)
+                        {
+                            if (debug == true)
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("DEBUG: Out of lives detected. Setting lives to 0 to clear negative value.");
+                            }
+
+                            lives = 0;
+
+                            Console.WriteLine("Press any key to continue");
+                            Console.WriteLine("");
+                            Console.ReadKey();
+
+                            Console.Clear();
+                            Console.WriteLine("");
+                            Console.WriteLine("Player is out of lives!");
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("GAME OVER");
+                            Console.ResetColor();
+                            Console.WriteLine("!");
+                            Console.WriteLine("");
+
+
+                        }
+
+                        Pause();
                     }
-
-                    Pause();
                 }
             }
         }
