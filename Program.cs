@@ -8,6 +8,8 @@ namespace HealthSystem
 {
     internal class Program
     {
+        static bool debug = true;
+
         static string gameName;
         static string studioName;
 
@@ -28,7 +30,7 @@ namespace HealthSystem
 
         static void Main(string[] args)
         {
-            
+
             gameName = "Health System v1.0";
             studioName = "Schnurr Studio";
 
@@ -38,17 +40,17 @@ namespace HealthSystem
             sp = 50;
             spMax = 50;
 
+            lives = 3;
+
             healthStatus = "Perfect Health";
 
             weaponName = "Stick";
+              
 
-
-            int choice = 1;
-
-            while (choice != 0)
+            while (choice.Key != ConsoleKey.D0)
             {
                 ShowHud();
-                Menu();               
+                Menu();
             }
 
             Console.WriteLine("");
@@ -64,7 +66,11 @@ namespace HealthSystem
 
             Console.WriteLine("");
             Console.WriteLine(".------------------------------------------------------------------------------------------.");
-            Console.WriteLine("|  SP: " + sp + "/" + hudSpMax.PadRight(5) + " HP: " + hp + "/" + hudHpMax.PadRight(7) + "Status: " + healthStatus.PadRight(17) + "  |     Weapon: " + weaponName.PadRight(20) + "|");
+            Console.WriteLine("|       SP: " + sp + "/" + hudSpMax.PadRight(9) + " HP: " + hp + "/" + hudHpMax.PadRight(12) + "Status: " + healthStatus.PadRight(21) + " Lives: " + lives + "        |");
+            Console.WriteLine("'------------------------------------------------------------------------------------------'");
+            Console.WriteLine("  |                                                                                      |");
+            Console.WriteLine(".------------------------------------------------------------------------------------------.");
+            Console.WriteLine("|       XP: 0 / 1000        Level: 1          Potions: 3          Deaths: 0                |");
             Console.WriteLine("'------------------------------------------------------------------------------------------'");
             Console.WriteLine("");
 
@@ -73,9 +79,19 @@ namespace HealthSystem
         static void Menu()
         {
             Console.WriteLine("");
-            Console.WriteLine("  (1) Run Tests");
+            Console.WriteLine(" (1) Run TakeDamage Method Tests");
+            Console.WriteLine(" (2) Run Heal Method Tests");
+            if (debug == true)
+            {
+                Console.WriteLine(" (9) Disable Debug Notes");
+            }
+
+            if (debug == false)
+            {
+                Console.WriteLine(" (9) Enable Debug Notes");
+            }
             Console.WriteLine("");
-            Console.WriteLine("  (0) Quit");
+            Console.WriteLine(" (0) Quit");
             Console.WriteLine("");
 
             Console.Write("Enter Choice: ");
@@ -83,16 +99,37 @@ namespace HealthSystem
             choice = Console.ReadKey(true);
             Console.WriteLine("");
 
-            switch(choice.Key)
+            switch (choice.Key)
             {
                 case ConsoleKey.D1:
 
-                        Console.WriteLine("");
-                        Console.WriteLine("DEBUG: Read input as '1', running tests for player stats.");             
+                    Console.WriteLine("");
+                    Console.WriteLine(" (0) Quit");
+                    Console.WriteLine("");
 
                     Pause();
 
                     TakeDamage(dice);
+
+                    break;
+
+                case ConsoleKey.D9:
+
+                    if (debug == true)
+                    {
+                        debug = false;
+                        Console.WriteLine("");
+                        Console.WriteLine("Debug notes disabled.");
+                        Console.WriteLine("");
+                    }
+
+                    else if (debug == false)
+                    {
+                        debug = true;
+                        Console.WriteLine("");
+                        Console.WriteLine("Debug notes enabled.");
+                        Console.WriteLine("");
+                    }
 
                     break;
             }
@@ -107,136 +144,137 @@ namespace HealthSystem
             Console.WriteLine("");
         }
 
-        
+
 
         static void TakeDamage(int damage)
         {
-            if(damage < 0)
+            if (damage < 0)
             {
                 Console.WriteLine("ERROR: Negative number detected. Damage value must be positive. No action taken.");
             }
 
             else
             {
-                
+
                 if (debug == true)
                 {
                     Console.WriteLine("");
                     Console.WriteLine("DEBUG: Checking if player is already dead or not. Current value for hp is " + hp + ". ");
-               
 
-                if (hp == 0)
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                    Console.Write("The player is dead!");
-                    Pause();
-                }
 
-                else
-                {
-                    if (debug == true)
+                    if (hp == 0)
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("DEBUG: Check passed. Applying damage of " + damage + " to player. Current value for sp is " + sp);
-                    }
-
-                    if (sp < 1)
-                    {
-                        if (debug == true)
-                        {
-                            Console.WriteLine("");
-                            Console.WriteLine("DEBUG: Detected that shield is already depleted. Applying damage to hp");
-                        }
-
-                        hp = hp - damage;
                         Console.WriteLine("");
-                        Console.Write("Player took " + damage + " damage!");
-                        HealthStat();
+                        Console.Write("The player is dead!");
+                        Pause();
                     }
 
                     else
                     {
-                        sp = sp - damage;
+                        if (debug == true)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("DEBUG: Check passed. Applying damage of " + damage + " to player. Current value for sp is " + sp);
+                        }
 
                         if (sp < 1)
                         {
                             if (debug == true)
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("DEBUG: Detected that shield is now depleted, value for sp is " + sp);
+                                Console.WriteLine("DEBUG: Detected that shield is already depleted. Applying damage to hp");
                             }
 
-                            int spill = Math.Abs(sp);
-                            sp = 0;
-
-                            if (debug == true)
-                            {
-                                Console.WriteLine("");
-                                Console.WriteLine("DEBUG: Converted negative shield value to positive, and set sp to 0. SP = " + sp + ", Spill = " + spill + ". Applying spill to hp");
-                            }
-
-                            hp = hp - spill;
+                            hp = hp - damage;
                             Console.WriteLine("");
-                            Console.Write("Shield is depleted! Player took " + spill + " damage!");
+                            Console.Write("Player took " + damage + " damage!");
                             HealthStat();
+                        }
+
+                        else
+                        {
+                            sp = sp - damage;
+
+                            if (sp < 1)
+                            {
+                                if (debug == true)
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("DEBUG: Detected that shield is now depleted, value for sp is " + sp);
+                                }
+
+                                int spill = Math.Abs(sp);
+                                sp = 0;
+
+                                if (debug == true)
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("DEBUG: Converted negative shield value to positive, and set sp to 0. SP = " + sp + ", Spill = " + spill + ". Applying spill to hp");
+                                }
+
+                                hp = hp - spill;
+                                Console.WriteLine("");
+                                Console.Write("Shield is depleted! Player took " + spill + " damage!");
+                                HealthStat();
+
+                            }
 
                         }
 
-                    }
-
-                    if (debug == true)
-                    { 
-                    Console.WriteLine("");
-                    Console.WriteLine("DEBUG: Value for hp is now " + hp);
-                    }
-
-                    if (hp < 1)
-                    {
                         if (debug == true)
                         {
                             Console.WriteLine("");
-                            Console.WriteLine("DEBUG: Death detected. Setting health to 0 to clear possible negative value and removing 1 life.");
+                            Console.WriteLine("DEBUG: Value for hp is now " + hp);
                         }
 
-                        Console.WriteLine("");
-                        Console.WriteLine("");
-                        Console.Write("Player has ");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("DIED");
-                        Console.ResetColor();
-                        Console.WriteLine("!");
-                        hp = 0;
-                        lives = (lives - 1);
-
-                        if (lives == -1)
+                        if (hp < 1)
                         {
                             if (debug == true)
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("DEBUG: Out of lives detected. Setting lives to 0 to clear negative value.");
+                                Console.WriteLine("DEBUG: Death detected. Setting health to 0 to clear possible negative value and removing 1 life.");
                             }
 
-                            lives = 0;
-
-                            Console.WriteLine("Press any key to continue");
                             Console.WriteLine("");
-                            Console.ReadKey();
-
-                            Console.Clear();
                             Console.WriteLine("");
-                            Console.WriteLine("Player is out of lives!");
-                            Console.WriteLine("");
+                            Console.Write("Player has ");
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("GAME OVER");
+                            Console.Write("DIED");
                             Console.ResetColor();
                             Console.WriteLine("!");
-                            Console.WriteLine("");
+                            hp = 0;
+                            lives = (lives - 1);
+
+                            if (lives == -1)
+                            {
+                                if (debug == true)
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("DEBUG: Out of lives detected. Setting lives to 0 to clear negative value.");
+                                }
+
+                                lives = 0;
+
+                                Console.WriteLine("Press any key to continue");
+                                Console.WriteLine("");
+                                Console.ReadKey();
+
+                                Console.Clear();
+                                Console.WriteLine("");
+                                Console.WriteLine("Player is out of lives!");
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.Write("GAME OVER");
+                                Console.ResetColor();
+                                Console.WriteLine("!");
+                                Console.WriteLine("");
 
 
+                            }
+
+                            Pause();
                         }
-
-                        Pause();
                     }
                 }
             }
@@ -277,7 +315,5 @@ namespace HealthSystem
 
             }
         }
-
     }
-
 }
