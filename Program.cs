@@ -8,6 +8,8 @@ namespace HealthSystem
 {
     internal class Program
     {
+        static bool debug = true;
+
         static string gameName;
         static string studioName;
 
@@ -19,16 +21,14 @@ namespace HealthSystem
         static int spMax;
 
         static string weaponName;
-        static int weapon;
-        static int medPack;
 
         static ConsoleKeyInfo choice;
 
-        static string locationName;
+        static int dice = 0;
 
         static void Main(string[] args)
         {
-
+            
             gameName = "Health System v1.0";
             studioName = "Schnurr Studio";
 
@@ -39,24 +39,24 @@ namespace HealthSystem
             spMax = 50;
 
             healthStatus = "Perfect Health";
-            weapon = 1;
-            weaponName = "Stick";
-            medPack = 25;
 
-            Courtyard();
+            weaponName = "Stick";
+
+
+            int choice = 1;
+
+            while (choice != 0)
+            {
+                ShowHud();
+                Menu();               
+            }
 
             Console.WriteLine("");
             Console.Write("Thank you for playing " + gameName + " By " + studioName);
             Pause();
 
         }
-        static void Title()
-        {
-            Console.Clear();
-            Console.WriteLine(".------------------------------------------------------------------------------------------.");
-            Console.WriteLine("|  You are in the " + locationName.PadRight(73) + "|");
-            Console.WriteLine("'------------------------------------------------------------------------------------------'");
-        }
+
         static void ShowHud()
         {
             string hudHpMax = hpMax.ToString();
@@ -70,100 +70,193 @@ namespace HealthSystem
 
         }
 
-        static ConsoleKeyInfo MakeChoice()
+        static void Menu()
         {
             Console.WriteLine("");
+            Console.WriteLine("  (1) Simulate Random Damage            (2) Simulate Damage (input value)");
+            Console.WriteLine("  ()");
+            Console.WriteLine("  ()");
+            Console.WriteLine("  (9) Disable Debug");
+            Console.WriteLine("");
+
             Console.Write("Enter Choice: ");
 
             choice = Console.ReadKey(true);
             Console.WriteLine("");
 
-            return choice;
+            switch(choice.Key)
+            {
+                case ConsoleKey.D1:
+
+                    Random rand = new Random();
+                    dice = rand.Next(0, 100);
+
+                    if (debug == true)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine("DEBUG: Read input as '1', random number generated is " + dice + ". Passing that value into TakeDamage method.");
+                    }    
+
+                    Pause();
+
+                    TakeDamage(dice);
+
+                    break;
+            }
+
         }
 
         static void Pause()
         {
+            Console.WriteLine("");
+            Console.WriteLine("Press any key to continue.");
             Console.ReadKey(true);
             Console.WriteLine("");
         }
 
-        static void Courtyard()
-        {
-            locationName = "Courtyard";
-
-            while (choice.Key != ConsoleKey.Q)
-            {
-                Title();
-
-                Console.WriteLine("");
-                Console.WriteLine("  (A)rena");
-                Console.WriteLine("  (B)lacksmith");
-                Console.WriteLine("  (H)ealer");
-                Console.WriteLine("  (Q)uit");
-                Console.WriteLine("");
-
-                ShowHud();
-
-                choice = MakeChoice();
-
-                if (choice.Key == ConsoleKey.A)
-                {
-                    Arena();
-                }
-
-    //            if (choice.Key == ConsoleKey.B)
-    //            {
-    //                Blacksmith();
-    //            }
-    //
-    //            if (choice.Key == ConsoleKey.H)
-    //            {
-    //                Healer();
-    //            }
-
-                
-            }
-            
-        }
-
-        static void Arena()
-        {
-            locationName = "Arena";
-
-            while (choice.Key != ConsoleKey.R)
-            {
-                Title();
-
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine(" (F)ight");
-                Console.WriteLine(" (R)eturn to Courtyard");
-                Console.WriteLine("");
-                Console.WriteLine("");
-
-                ShowHud();
-
-                choice = MakeChoice();
-
-                if (choice.Key == ConsoleKey.F)
-                {
-                    Battle();
-                }
-            }
-        }
-
-        static void Battle()
-        {
-            int baddieHP = 10;
-
-
-            Console.Clear();
-            Console.WriteLine(".------------------------------------------------------------------------------------------.");
-            Console.WriteLine("|  You are in battle!                                                                      |");
-            Console.WriteLine("'------------------------------------------------------------------------------------------'");
-            Pause();
-        }
-
         
+
+        static void TakeDamage(int damage)
+        {
+            if(damage < 0)
+            {
+                Console.WriteLine("ERROR: Negative number detected. Damage value must be positive. No action taken.");
+            }
+
+            else
+            {
+                
+                if (debug == true)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("DEBUG: Checking if player is already dead or not. Current value for hp is " + hp + ". ");
+                }
+
+                if (hp == 0)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                    Console.Write("The player is dead!");
+                    Pause();
+                }
+
+                else
+                {
+                    if (debug == true)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine("DEBUG: Check passed. Applying damage of " + damage + " to player. Current value for sp is " + sp);
+                    }
+
+                    if (sp < 1)
+                    {
+                        if (debug == true)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("DEBUG: Detected that shield is already depleted. Applying damage to hp");
+                        }
+
+                        hp = hp - damage;
+                        Console.WriteLine("");
+                        Console.Write("Player took " + damage + " damage!");
+                        HealthStat();
+                    }
+
+                    else
+                    {
+                        sp = sp - damage;
+
+                        if (sp < 1)
+                        {
+                            if (debug == true)
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("DEBUG: Detected that shield is now depleted, value for sp is " + sp);
+                            }
+
+                            int spill = Math.Abs(sp);
+                            sp = 0;
+
+                            if (debug == true)
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("DEBUG: Converted negative shield value to positive, and set sp to 0. SP = " + sp + ", Spill = " + spill);
+                            }
+
+                            hp = hp - spill;
+                            Console.WriteLine("");
+                            Console.Write("Shield is depleted! Player took " + spill + " damage!");
+                            HealthStat();
+
+                        }
+
+                    }
+
+                    hp = hp - damage;
+                    Console.WriteLine("");
+                    Console.Write("Player took " + damage + " damage!");
+                    HealthStat();
+
+                    if (debug == true)
+                    { 
+                    Console.WriteLine("");
+                    Console.WriteLine("DEBUG: Value for hp is now " + hp + ". Next checking if player is now dead.");
+                    }
+
+                    if (hp < 1)
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine("");
+                        Console.Write("Player has ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("DIED");
+                        Console.ResetColor();
+                        Console.WriteLine("!");
+                        hp = 0;
+
+                    }
+
+                    Pause();
+                }
+            }
+        }
+
+        static void HealthStat()
+        {
+            healthStatus = "";
+
+            if (hp == 100)
+            {
+                healthStatus = "Perfect Health";
+            }
+
+            if ((hp < 100) && (hp >= 75))
+            {
+                healthStatus = "Healthy";
+            }
+
+            if ((hp < 75) && (hp >= 50))
+            {
+                healthStatus = "Hurt";
+            }
+
+            if ((hp < 50) && (hp >= 10))
+            {
+                healthStatus = "Badly Hurt";
+            }
+
+            if ((hp < 10) && (hp > 0))
+            {
+                healthStatus = "Imminent Danger";
+            }
+
+            if (hp <= 0)
+            {
+                healthStatus = "DEAD";
+
+            }
+        }
+
     }
+
 }
