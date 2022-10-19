@@ -9,6 +9,10 @@ namespace HealthSystem
     internal class Program
     {
         static bool debug = true;
+        static int testval;
+        static string testName;
+        static string testMessage1;
+        static string testMessage2;
 
         static string gameName;
         static string studioName;
@@ -16,8 +20,8 @@ namespace HealthSystem
         static int lives;
         static int deaths;
 
-        static int hp;
-        static int hpMax;
+        static int health;
+        static int healthMax;
         static string healthStatus;
 
         static int sp;
@@ -35,8 +39,8 @@ namespace HealthSystem
             gameName = "Health System v1.0";
             studioName = "Schnurr Studio";
 
-            hp = 100;
-            hpMax = 100;
+            health = 100;
+            healthMax = 100;
 
             sp = 100;
             spMax = 100;
@@ -47,7 +51,7 @@ namespace HealthSystem
             healthStatus = "Perfect Health";
 
             weaponName = "Stick";
-              
+
 
             while (choice.Key != ConsoleKey.D0)
             {
@@ -62,10 +66,10 @@ namespace HealthSystem
 
         static void ShowHud()
         {
-            string hudhp = hp.ToString();
+            string hudhp = health.ToString();
             string hudsp = sp.ToString();
 
-            string hudHpMax = hpMax.ToString();
+            string hudHpMax = healthMax.ToString();
             string hudSpMax = spMax.ToString();
 
             Console.WriteLine("");
@@ -89,7 +93,7 @@ namespace HealthSystem
             Console.WriteLine("  '------------------------------------------------------------------------------------------'");
         }
 
-            static void Menu()
+        static void Menu()
         {
 
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -99,7 +103,8 @@ namespace HealthSystem
             Console.WriteLine("");
             Console.WriteLine("      (1) Run TakeDamage Method Tests");
             Console.WriteLine("      (2) Run Heal Method Tests");
-            Console.WriteLine("      (3) Toggle Debug notes in Tests");
+            Console.WriteLine("      (3) Run RegenerateShield Method Tests");
+            Console.WriteLine("      (9) Toggle Debug notes in Tests");
             Console.WriteLine("      (0) Quit");
             Console.WriteLine("");
 
@@ -119,171 +124,220 @@ namespace HealthSystem
             {
                 case ConsoleKey.D1:
 
+                    Console.Clear();
+
                     Reset();
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 1: 50 damage input to test shield depletion.");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
+                    testName = "TakeDamage";
+
+                    testval = 50;
+
+                    testMessage1 = "Applying " + testval + " damage input to test shield depletion.";
+                    testMessage2 = null;
+
+                    testFrame();
 
                     ShowHud();
-
-                    TakeDamage(50);
-
+                    TakeDamage(testval);
                     ShowHud();
-
                     Pause();
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 2: Now we will apply 75 damage to test shield");
-                    Console.WriteLine(" depletion to 0 and spill to health.");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
+                    testval = 75;
+
+                    testMessage1 = "Test 2: Now we will apply " + testval + " damage to test shield";
+                    testMessage2 = null;
+
+                    testFrame();
 
                     ShowHud();
-
-                    TakeDamage(75);
-
+                    TakeDamage(testval);
                     ShowHud();
-
                     Pause();
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 3: Now we will apply 80 damage to test health");
-                    Console.WriteLine(" depletion to 0 and reduction in life points.");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
+                    testval = 80;
+
+                    testMessage1 = "Test 3: Now we will apply " + testval + " damage to test health";
+                    testMessage2 = "depletion to 0 and reduction in life points.";
+
+                    testFrame();
 
                     ShowHud();
-
-                    TakeDamage(80);
-
+                    TakeDamage(testval);
                     ShowHud();
-
                     Pause();
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 4: Next we will apply 110 damage a few times");
-                    Console.WriteLine(" to deplete lives beyond 0.");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
+                    testval = 110;
+
+                    testMessage1 = "Test 4: Next we will apply " + testval + " damage a few times";
+                    testMessage2 = "to deplete lives beyond 0.";
+
+                    testFrame();
 
                     ShowHud();
-
-                    TakeDamage(110);
-
+                    TakeDamage(testval);
                     ShowHud();
-
                     Pause();
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 4 continued: Applying 110 again");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
+                    testMessage1 = "Test 4 continued: Applying " + testval + " again.";
+                    testMessage2 = null;
+
+                    testFrame();
 
                     ShowHud();
+                    TakeDamage(testval);
+                    ShowHud();
+                    Pause();
 
-                    TakeDamage(110);
+                    testMessage1 = "Test 4 continued: And once more to show Game Over.";
+                    testMessage2 = null;
+
+                    testFrame();
 
                     ShowHud();
-
+                    TakeDamage(testval);
+                    ShowHud();
                     Pause();
+                    
+                    testval = 10;
+
+                    testMessage1 = "Test 5: Now if we try to pass " + testval + " damage into TakeDamage:";
+                    testMessage2 = null;
+
+                    testFrame();
+
+                    ShowHud();
+                    TakeDamage(testval);
+                    ShowHud();
+                    Pause();
+
+                    testval = -10;
+
+                    testMessage1 = "Test 6: Now applying " + testval + "damage";
+                    testMessage2 = "to test error checking.";
+
+                    testFrame();
+
+                    ShowHud();
+                    TakeDamage(testval);
+                    ShowHud();
 
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 4 continued: And once more to show Game Over");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
+                    Console.WriteLine("Tests complete.");
                     Console.ResetColor();
-                    Pause();
-
-                    ShowHud();
-
-                    TakeDamage(110);
-
-                    ShowHud();
-
-                    Pause();
-
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 5: Now if we try to pass 10 damage into TakeDamage:");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
-
-                    ShowHud();
-
-                    TakeDamage(10);
-
-                    ShowHud();
-
-                    Pause();
-
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("");
-                    Console.WriteLine("Running TakeDamage Method Tests:");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.WriteLine("");
-                    Console.WriteLine(" Test 6: Finally we'll pass -10 as damage");
-                    Console.WriteLine("");
-                    Console.WriteLine("--------------------------------------------------");
-                    Console.ResetColor();
-                    Pause();
-
-                    ShowHud();
-
-                    TakeDamage(-10);
-
-                    ShowHud();
 
                     Pause();
 
                     break;
 
                 case ConsoleKey.D2:
-                                    
+
+                    Console.Clear();
+
+                    Reset();
+
+                    testName = "Heal";
+
+                    health = 1;
+                    HealthStat();
+                    testval = 60;
+
+                    testMessage1 = "Test 1: I have reduced player's Hit Points to 1.";
+                    testMessage2 = "Applying " + testval + " health input to test healing.";
+
+                    testFrame();
+
+                    ShowHud();
+                    Heal(testval);
+                    ShowHud();
+                    Pause();
+
+                    testMessage1 = "Test 2: Applying another " + testval + " health input.";
+                    testMessage2 = "to test range clamping of Hit Points to Max Health.";
+
+                    testFrame();
+
+                    ShowHud();
+                    Heal(testval);
+                    ShowHud();
+                    Pause();
+
+                    testMessage1 = "Test 3: Applying another " + testval + " health input.";
+                    testMessage2 = "to test reaction to Hit Points already being full.";
+
+                    testFrame();
+
+                    ShowHud();
+                    Heal(testval);
+                    ShowHud();
+                    Pause();
+
+                    testval = -10;
+
+                    testMessage1 = "Test 4: Now applying " + testval + " health input.";
+                    testMessage2 = "to test to test error checking.";
+
+                    testFrame();
+
+                    ShowHud();
+                    Heal(testval);
+                    ShowHud();
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Tests complete.");
+                    Console.ResetColor();
+
+                    Pause();
 
                     break;
 
                 case ConsoleKey.D3:
+
+                    Console.Clear();
+
+                    Reset();
+
+                    testName = "RegenerateShield";
+                    sp = 1;
+                    testval = 60;
+
+                    testMessage1 = "Test 1: I have reduced player's Shield Points to 1.";
+                    testMessage2 = "Applying " + testval + " Shield Regen input to test shield restore.";
+
+                    testFrame();
+
+                    ShowHud();
+                    RegenerateShield(testval);
+                    ShowHud();
+                    Pause();
+
+                    testMessage1 = "Test 2: Applying another " + testval + " Sheild Regen input";
+                    testMessage2 = "to test range clamping of Shield Points to Max Shield.";
+
+                    testFrame();
+
+                    ShowHud();
+                    RegenerateShield(testval);
+                    ShowHud();
+                    Pause();
+
+                    testval = -10;
+
+                    testMessage1 = "Test 3: Now applying " + testval + " health input to test error checking";
+                    testMessage2 = "";
+
+                    testFrame();
+
+                    ShowHud();
+                    RegenerateShield(testval);
+                    ShowHud();
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Tests complete.");
+                    Console.ResetColor();
+
+                    break;
+
+                case ConsoleKey.D9:
 
                     if (debug == true)
                     {
@@ -316,8 +370,32 @@ namespace HealthSystem
             Console.WriteLine("");
         }
 
+        static void testFrame()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("");
+            Console.Write("Running ");
+            Console.ResetColor();
+            Console.Write(testName);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(" Method Tests:");
+            Console.WriteLine("-----------------------------------------------------------------------");
+            Console.WriteLine("");
+            Console.WriteLine(" " + testMessage1);
+            if (testMessage2 == null)
+            {
 
-        
+            }
+            else if (testMessage2 != null)
+            {
+                Console.WriteLine(" " + testMessage2);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("-----------------------------------------------------------------------");
+            Console.ResetColor();
+            Pause();
+        }
+
         static void TakeDamage(int damage)
         {
             if (damage < 0)
@@ -335,14 +413,12 @@ namespace HealthSystem
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("DEBUG: Checking if player is already dead or not. Current value for hp is ");
                     Console.ResetColor();
-                    Console.WriteLine(hp);
+                    Console.WriteLine(health);
                 }
 
-                if (hp == 0)
+                if (health == 0)
                 {
-                    Console.WriteLine("");
                     Console.WriteLine("The player is dead!");
-                    Console.WriteLine("");
 
                     if (debug == true)
                     {
@@ -353,7 +429,7 @@ namespace HealthSystem
                     }
                 }
 
-                else if (hp > 0)
+                else if (health > 0)
                 {
                     if (debug == true)
                     {
@@ -401,10 +477,8 @@ namespace HealthSystem
                                 Console.ResetColor();
                             }
 
-                            hp = hp - spill;
-                            Console.WriteLine("");
+                            health = health - spill;
                             Console.Write("Shield is depleted! Player took " + spill + " damage!");
-                            Console.WriteLine("");
                             HealthStat();
 
                         }
@@ -421,9 +495,7 @@ namespace HealthSystem
                                 Console.WriteLine(" to shield.");
                                 Console.ResetColor();
                             }
-                            Console.WriteLine("");
                             Console.Write("Shield took " + damage + " damage!");
-                            Console.WriteLine("");
                         }
 
                     }
@@ -441,10 +513,8 @@ namespace HealthSystem
                             Console.ResetColor();
                         }
 
-                        hp = hp - damage;
-                        Console.WriteLine("");
+                        health = health - damage;
                         Console.WriteLine("Player took " + damage + " damage!");
-                        Console.WriteLine("");
                         HealthStat();
 
                         if (debug == true)
@@ -452,10 +522,10 @@ namespace HealthSystem
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.Write("DEBUG: Rechecking if player is dead. Hp is ");
                             Console.ResetColor();
-                            Console.WriteLine(hp);
+                            Console.WriteLine(health);
                         }
 
-                        if (hp < 1)
+                        if (health < 1)
                         {
                             Console.WriteLine("");
                             Console.Write("Player has ");
@@ -485,7 +555,7 @@ namespace HealthSystem
                                 }
 
                                 lives = 0;
-                                hp = 0;
+                                health = 0;
 
                                 Console.WriteLine("");
                                 Console.WriteLine("Player is out of lives!");
@@ -506,7 +576,7 @@ namespace HealthSystem
                                     Console.ResetColor();
                                 }
 
-                                hp = hpMax;
+                                health = healthMax;
                                 HealthStat();
 
                             }
@@ -516,36 +586,152 @@ namespace HealthSystem
             }
         }
 
+        static void Heal(int hp)
+        {
+            int healToMax;
+            healToMax = healthMax - health;
+
+            if (hp < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("ERROR: Negative number detected. Heal value must be positive. No action taken.");
+                Console.ResetColor();
+            }
+
+            else if (health == healthMax)
+            {
+                if (debug == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("DEBUG: Detected that hp are already full. No action taken.");
+                    Console.ResetColor();
+                }
+
+                Console.WriteLine("Hit Points are already full!");
+            }
+
+            else
+            {
+                if (hp > healToMax)
+                {
+                    if (debug == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("DEBUG: Detected that heal value is greater than amount needed to full health.");
+                        Console.WriteLine("Setting hp to max and disregarding rest.");
+                        Console.ResetColor();
+                    }
+
+                    health = healthMax;
+                    HealthStat();
+
+                    Console.WriteLine("Healed " + healToMax + " Hit Points!");
+                }
+
+                else
+                {
+                    if (debug == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("DEBUG: Detected that heal value is less than amount needed to full health. Adding heal value to hp.");
+                        Console.ResetColor();
+                    }
+
+                    health = health + hp;
+                    HealthStat();
+
+                    Console.WriteLine("Healed " + hp + " Hit Points!");
+                }
+            }
+        }
+
+        static void RegenerateShield(int hp)
+        {
+            int shieldToMax;
+            shieldToMax = spMax - sp;
+
+            if (hp < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("ERROR: Negative number detected. Shield Regen value must be positive. No action taken.");
+                Console.ResetColor();
+            }
+
+            else if (sp == spMax)
+            {
+                if (debug == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("DEBUG: Detected that sp are already full. No action taken.");
+                    Console.ResetColor();
+                }
+
+                Console.WriteLine("Shield Points are already full!");
+            }
+
+            else
+            {
+                if (hp > shieldToMax)
+                {
+                    if (debug == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("DEBUG: Detected that Shield Regen value is greater than amount needed to full shield.");
+                        Console.WriteLine("Setting sp to max and disregarding rest.");
+                        Console.ResetColor();
+                    }
+
+                    sp = spMax;
+
+                    Console.WriteLine("Restored " + shieldToMax + " Shield Points!");
+                }
+
+                else
+                {
+                    if (debug == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("DEBUG: Detected that Shield Regen value is less than amount needed to full shield. Adding Shield Regen value to sp.");
+                        Console.ResetColor();
+                    }
+
+                    sp = sp + hp;
+
+                    Console.WriteLine("Restored " + hp + " Shield Points!");
+                }
+            }
+        }
+
         static void HealthStat()
         {
             healthStatus = "";
 
-            if (hp == 100)
+            if (health == 100)
             {
                 healthStatus = "Perfect Health";
             }
 
-            if ((hp < 100) && (hp >= 75))
+            if ((health < 100) && (health >= 75))
             {
                 healthStatus = "Healthy";
             }
 
-            if ((hp < 75) && (hp >= 50))
+            if ((health < 75) && (health >= 50))
             {
                 healthStatus = "Hurt";
             }
 
-            if ((hp < 50) && (hp >= 10))
+            if ((health < 50) && (health >= 10))
             {
                 healthStatus = "Badly Hurt";
             }
 
-            if ((hp < 10) && (hp > 0))
+            if ((health < 10) && (health > 0))
             {
                 healthStatus = "Imminent Danger";
             }
 
-            if (hp <= 0)
+            if (health <= 0)
             {
                 healthStatus = "DEAD";
 
@@ -558,8 +744,8 @@ namespace HealthSystem
             Console.WriteLine("Stats have been reset.");
             Console.WriteLine("");
 
-            hp = 100;
-            hpMax = 100;
+            health = 100;
+            healthMax = 100;
 
             sp = 100;
             spMax = 100;
