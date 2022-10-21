@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Health System by Chris Schnurr
+
 namespace HealthSystem
 {
     internal class Program
@@ -27,11 +29,7 @@ namespace HealthSystem
         static int sp;
         static int spMax;
 
-        static string weaponName;
-
         static ConsoleKeyInfo choice;
-
-        static int dice = 0;
 
         static void Main(string[] args)
         {
@@ -50,17 +48,10 @@ namespace HealthSystem
 
             healthStatus = "Perfect Health";
 
-            weaponName = "Stick";
-
-
             while (choice.Key != ConsoleKey.D0)
             {
                 Menu();
             }
-
-            Console.WriteLine("");
-            Console.Write("Thank you for playing " + gameName + " By " + studioName);
-            Pause();
 
         }
 
@@ -74,15 +65,12 @@ namespace HealthSystem
 
             Console.WriteLine("");
             Console.WriteLine(".------------------------------------------------------------------------------------------.");
-            Console.WriteLine("|       SP: " + hudsp.PadRight(3) + "/" + hudSpMax.PadRight(9) + " HP: " + hudhp.PadRight(3) + "/" + hudHpMax.PadRight(12) + "Status: " + healthStatus.PadRight(21) + " Lives: " + lives + "       |");
-            Console.WriteLine("'------------------------------------------------------------------------------------------'");
-            Console.WriteLine("  |                                                                                      |");
-            Console.WriteLine(".------------------------------------------------------------------------------------------.");
-            Console.WriteLine("|       XP: 0 / 1000        Level: 1          Potions: 3          Deaths: " + deaths + "                |");
+            Console.WriteLine("| SP: " + hudsp.PadRight(3) + " / " + hudSpMax.PadRight(9) + " HP: " + hudhp.PadRight(3) + " / " + hudHpMax.PadRight(9) + "Status: " + healthStatus.PadRight(18) + " Lives: " + lives + "    Deaths: " + deaths + "  |");
             Console.WriteLine("'------------------------------------------------------------------------------------------'");
             Console.WriteLine("");
 
         }
+
 
         static void Title()
         {
@@ -104,6 +92,7 @@ namespace HealthSystem
             Console.WriteLine("      (1) Run TakeDamage Method Tests");
             Console.WriteLine("      (2) Run Heal Method Tests");
             Console.WriteLine("      (3) Run RegenerateShield Method Tests");
+            Console.WriteLine("");
             Console.WriteLine("      (9) Toggle Debug notes in Tests");
             Console.WriteLine("      (0) Quit");
             Console.WriteLine("");
@@ -323,7 +312,7 @@ namespace HealthSystem
                     testval = -10;
 
                     testMessage1 = "Test 3: Now applying " + testval + " health input to test error checking";
-                    testMessage2 = "";
+                    testMessage2 = null;
 
                     testFrame();
 
@@ -418,6 +407,7 @@ namespace HealthSystem
 
                 if (health == 0)
                 {
+                    Console.WriteLine("");
                     Console.WriteLine("The player is dead!");
 
                     if (debug == true)
@@ -478,7 +468,8 @@ namespace HealthSystem
                             }
 
                             health = health - spill;
-                            Console.Write("Shield is depleted! Player took " + spill + " damage!");
+                            Console.WriteLine("");
+                            Console.WriteLine("Shield is depleted! Player took " + spill + " damage!");
                             HealthStat();
 
                         }
@@ -495,7 +486,8 @@ namespace HealthSystem
                                 Console.WriteLine(" to shield.");
                                 Console.ResetColor();
                             }
-                            Console.Write("Shield took " + damage + " damage!");
+                            Console.WriteLine("");
+                            Console.WriteLine("Shield took " + damage + " damage!");
                         }
 
                     }
@@ -514,6 +506,7 @@ namespace HealthSystem
                         }
 
                         health = health - damage;
+                        Console.WriteLine("");
                         Console.WriteLine("Player took " + damage + " damage!");
                         HealthStat();
 
@@ -550,7 +543,7 @@ namespace HealthSystem
                                 if (debug == true)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Blue;
-                                    Console.WriteLine("DEBUG: Negative number detected for Life (game over). Setting lives and hp to 0 to clear negative values.");
+                                    Console.WriteLine("DEBUG: Negative number detected for Life (last life used). Setting lives and hp to 0 to clear negative values.");
                                     Console.ResetColor();
                                 }
 
@@ -607,6 +600,7 @@ namespace HealthSystem
                     Console.ResetColor();
                 }
 
+                Console.WriteLine("");
                 Console.WriteLine("Hit Points are already full!");
             }
 
@@ -625,6 +619,7 @@ namespace HealthSystem
                     health = healthMax;
                     HealthStat();
 
+                    Console.WriteLine("");
                     Console.WriteLine("Healed " + healToMax + " Hit Points!");
                 }
 
@@ -640,6 +635,7 @@ namespace HealthSystem
                     health = health + hp;
                     HealthStat();
 
+                    Console.WriteLine("");
                     Console.WriteLine("Healed " + hp + " Hit Points!");
                 }
             }
@@ -666,6 +662,7 @@ namespace HealthSystem
                     Console.ResetColor();
                 }
 
+                Console.WriteLine("");
                 Console.WriteLine("Shield Points are already full!");
             }
 
@@ -683,6 +680,7 @@ namespace HealthSystem
 
                     sp = spMax;
 
+                    Console.WriteLine("");
                     Console.WriteLine("Restored " + shieldToMax + " Shield Points!");
                 }
 
@@ -697,6 +695,7 @@ namespace HealthSystem
 
                     sp = sp + hp;
 
+                    Console.WriteLine("");
                     Console.WriteLine("Restored " + hp + " Shield Points!");
                 }
             }
